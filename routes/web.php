@@ -31,7 +31,7 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::group(['prefix' => 'servicios', 'middleware' => ['auth']], function (){
+Route::group(['prefix' => 'services', 'middleware' => ['auth']], function (){
     //admin routes
         Route::get('register-service', function(){
             return view('services.register-service');
