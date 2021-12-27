@@ -3,19 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Service;
 
-class RegisterController extends Controller
+class ServiceController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $services = Service::all();
-        return view('services.register-service', compact('services'));
+        return view('services.services');
         //
     }
 

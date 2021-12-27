@@ -20,19 +20,18 @@
         <div class="card p-3 mb-4">
             <div class="row">
                 <div class="col-6">
-                    <select class="custom-select form-select">
-                        <option value="0" selected>Microbleding Mixta</option>
-                        <option value="1">Microbleding Natural</option>
-                        <option value="2">Microbleding Retoque</option>
-                        <option value="3">Delineado de labios</option>
+                    <select class="custom-select form-select" id="listservices" onchange="changed_price()">
+                        @foreach ($services as $service)
+                          <option id="idservice{{$service->id}}" value="{{$service->id}}|{{$service->price}}">{{ $service->name }}</option>
+                        @endforeach
                       </select>
                 </div>
     
                 <div class="col-3">
-                    <input type="text" class="form-control" placeholder="Precio">
+                    <input id="idprice" type="text" class="form-control" placeholder="Precio">
                 </div>
                 <div class="col-3 d-flex flex-row-reverse">
-                    <button class="btn btn-secondary">Agregar servicio</button>
+                    <button id="btn-register" class="btn btn-secondary">Agregar servicio</button>
                 </div>
             </div>
     
@@ -40,33 +39,19 @@
                 <table id="tableservices" class="table" style="height:80%">
                     <thead>
                       <tr>
-                        <th scope="col">Operaciones</th>
+                        <th class="col-3" scope="col">Operaciones</th>
                         <th scope="col">Servicio</th>
                         <th scope="col">Precio</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td class="text-end">4.60</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td class="text-end">5.20</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">3</th>
-                        <td >Larry the Bird</td>
-                        <td class="text-end">20.50</td>
-                      </tr>
+                  
                     </tbody>
                   </table>
             </div>
 
             <div class="d-flex flex-row-reverse mt-3 mx-0"> 
-                    <label class="col-1 text-end" for="">10.50</label>
+                    <label id="price-total" class="col-1 text-end" for="">00.00</label>
                     <label class="col-3" for="">Precio total</label>
             </div>
 
@@ -158,6 +143,45 @@
             select: true
         });
     } );    
+
+    $('#btn-register').on('click', function(){
+
+      var id = $('#listservices').val().split('|')[0];
+      $('#tableservices').DataTable().row.add([
+        '<button type="button" class="btn btn-danger">Quitar</button>',
+
+        //$('#idservice' + id).val().split('|')[0],
+        $('#idservice' + id).text(),
+        $('#idprice').val(),
+        
+      ]).draw(false);
+      refresh_price();
+    });
+
+    function changed_price(){
+      var price = $('#listservices').val().split('|')[1];
+      $('#idprice').val(price);
+    }
+
+    function refresh_price(){
+      var price = 0;
+      var data = $('#tableservices').DataTable().rows().data();
+      data.each(function (value, index) {
+        price += parseFloat(value[2]);
+      });
+      $('#price-total').html(price);
+    }
+
+    $('#tableservices tbody').on( 'click', 'button.btn-danger', function () {
+      $('#tableservices').DataTable()
+        .row( $(this).parents('tr') )
+        .remove()
+        .draw();
+        refresh_price();
+      } );
+
+    changed_price();
+
   </script>
 
 @endsection

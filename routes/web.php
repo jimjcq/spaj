@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\http\Controllers\RegisterController;
+use App\http\Controllers\ServiceController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -33,11 +34,11 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::group(['prefix' => 'services', 'middleware' => ['auth']], function (){
     //admin routes
-        Route::get('register-service', function(){
+        /*Route::get('register-service', function(){
             return view('services.register-service');
-        });
-        Route::get('services', function(){
-            return view('services.services');
-        });
+        });*/
+        Route::get('register-service', [RegisterController::class, 'index']);
+        Route::get('services', [ServiceController::class, 'index']);
+
     }
   );
